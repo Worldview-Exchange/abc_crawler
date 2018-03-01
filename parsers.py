@@ -25,7 +25,6 @@ class ArticleParser(HTMLParser):
         if tag == "div" and self.indiv:
             if self.nesting == 0:
                 self.indiv = False
-                print(self.content)
             else:
                 self.nesting -= 1
         elif tag == "p" and self.indiv:
@@ -46,9 +45,6 @@ class TopicParser(HTMLParser):
         elif tag == "a" and self.initem:
             if attrs:
                 self.articles.append(attrs[0][1])
-
-    def handle_data(self, data):
-        True
 
     def handle_endtag(self, tag):
         if self.inlist:

@@ -1,24 +1,25 @@
 import requests
 from parsers import *
 
+# Extract set of articles of a specified topic
 def crawlTopic(topic, num_articles):
     parser = TopicParser()
     page = 1
     
     while True:
+        # collect topic page and extract article links
         response = requests.get("http://www.abc.net.au/news/topic/%s" % topic)
         parser.feed(str(response.content))
 
+        # handle page increment
         page += 1
         topic += "?page=%d" % page
 
+        # exit loop when enough article links have been extracted
         if len(parser.articles) > num_articles:
             break
 
-    print(parser.articles[:num_articles])
+    return parser.articles[:num_articles]
 
-# response = requests.get("http://www.abc.net.au/news/2018-03-01/south-africa-plan-to-best-australia-keep-steve-smith-quiet/9498062?section=sport")
-# parser = ArticleParser()
-# parser.feed(str(response.content))
-
-crawlTopic("winter-olympics", 26)
+articles = crawlTopic("winter-olympics", 26)
+print(articles)

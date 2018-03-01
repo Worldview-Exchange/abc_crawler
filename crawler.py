@@ -22,4 +22,13 @@ def crawlTopic(topic, num_articles):
     return parser.articles[:num_articles]
 
 articles = crawlTopic("winter-olympics", 26)
-print(articles)
+
+article_content = []
+for article in articles:
+    response = requests.get("http://www.abc.net.au%s" % article)
+    parser = ArticleParser()
+    parser.feed(str(response.content))
+    article_content.append(parser.content)
+
+print(articles[0] + "\n")
+print(article_content[0])

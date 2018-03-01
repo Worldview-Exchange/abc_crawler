@@ -54,6 +54,5 @@ class TopicParser(HTMLParser):
         if self.inlist:
             if tag == "ul":
                 self.inlist = False
-                print(self.articles)
             elif tag == "h3":
                 self.initem = False

@@ -31,7 +31,40 @@ class ArticleParser(HTMLParser):
         elif tag == "p" and self.indiv:
             self.inp = False
 
+# Parse list of articles from a topic page
+class TopicParser(HTMLParser):
+    inlist = False
+    initem = False
+    articles = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "ul":
+            if attrs and attrs[0][1] == "article-index":
+                self.inlist = True
+        elif tag == "h3" and self.inlist:
+            self.initem = True
+        elif tag == "a" and self.initem:
+            if attrs:
+                self.articles.append(attrs[0][1])
+
+    def handle_data(self, data):
+        True
+
+    def handle_endtag(self, tag):
+        if self.inlist:
+            if tag == "ul":
+                self.inlist = False
+                print(self.articles)
+            elif tag == "h3":
+                self.initem = False
+
+#
 import requests
-response = requests.get("http://www.abc.net.au/news/2018-03-01/south-africa-plan-to-best-australia-keep-steve-smith-quiet/9498062?section=sport")
-parser = ArticleParser()
+
+# response = requests.get("http://www.abc.net.au/news/2018-03-01/south-africa-plan-to-best-australia-keep-steve-smith-quiet/9498062?section=sport")
+# parser = ArticleParser()
+# parser.feed(str(response.content))
+
+response = requests.get("http://www.abc.net.au/news/topic/winter-olympics")
+parser = TopicParser()
 parser.feed(str(response.content))

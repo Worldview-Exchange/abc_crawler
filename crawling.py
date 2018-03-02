@@ -22,6 +22,7 @@ def crawlTopic(topic, num_articles):
 
     return parser.articles[:num_articles]
 
+# Get article content for list of article links
 def crawlArticles(article_links):
     article_content = []
     for article in article_links:
@@ -32,6 +33,7 @@ def crawlArticles(article_links):
 
     return article_content
 
+# Output article content to a csv file
 def outputToPdf(articles, file_name):
     df = pd.DataFrame(articles, columns=["content"])
     df.to_csv(file_name)

@@ -6,11 +6,11 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv,"hi:n:o:",["topic=","num=","ofile="])
     except getopt.GetoptError:
-        print('crawler.py -i <topic> -n <number_of_articles> -o <outputfile>')
+        print('abc_crawl.py -i <topic> -n <number_of_articles> -o <outputfile>')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('crawler.py -i <topic> -n <number_of_articles> -o <outputfile>')
+            print('abc_crawl.py -i <topic> -n <number_of_articles> -o <outputfile>')
             sys.exit()
         elif opt in ("-i", "--topic"):
             topic = arg

@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 from parsers import *
 
 # Extract set of articles of a specified topic
@@ -21,14 +22,20 @@ def crawlTopic(topic, num_articles):
 
     return parser.articles[:num_articles]
 
-articles = crawlTopic("winter-olympics", 26)
+def crawlArticles(article_links):
+    article_content = []
+    for article in article_links:
+        response = requests.get("http://www.abc.net.au%s" % article)
+        parser = ArticleParser()
+        parser.feed(str(response.content))
+        article_content.append(parser.content)
 
-article_content = []
-for article in articles:
-    response = requests.get("http://www.abc.net.au%s" % article)
-    parser = ArticleParser()
-    parser.feed(str(response.content))
-    article_content.append(parser.content)
+    return article_content
 
-print(articles[0] + "\n")
-print(article_content[0])
+def outputToPdf(articles, file_name):
+    df = pd.DataFrame(articles, columns=["content"])
+    df.to_csv(file_name)
+
+topic = crawlTopic("winter-olympics", 5)
+articles = crawlArticles(topic)
+outputToPdf(articles, "test_crawl.csv")

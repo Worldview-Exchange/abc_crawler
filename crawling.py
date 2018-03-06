@@ -31,9 +31,9 @@ def crawlArticles(article_links):
         parser.feed(str(response.content))
         article_content.append(parser.content)
 
-    return article_content
+    return [content for content in article_content if content != ""]
 
 # Output article content to a csv file
-def outputToPdf(articles, file_name):
+def outputToCsv(articles, file_name):
     df = pd.DataFrame(articles, columns=["content"])
     df.to_csv(file_name)

@@ -27,7 +27,7 @@ def main(argv):
 
     # writes articles to file
     print('Writing files to %s...' % outputfile)
-    outputToPdf(articles, outputfile)
+    outputToCsv(articles, outputfile)
     print("Done...")
 
 

@@ -27,8 +27,9 @@ class ArticleParser(HTMLParser):
                 self.indiv = False
             else:
                 self.nesting -= 1
-        elif tag == "p" and self.indiv:
+        elif tag == "p" and self.indiv and self.inp:
             self.inp = False
+            self.content += "\n"
 
 # Parse list of articles from a topic page
 class TopicParser(HTMLParser):

@@ -4,6 +4,7 @@ class Article:
     def __init__(self, title=""):
         self.title = title
         self.content = ""
+        self.description = ""
 
 # Parse content from an article page
 class ArticleParser(HTMLParser):
@@ -14,7 +15,6 @@ class ArticleParser(HTMLParser):
     article = Article()
 
     def handle_starttag(self, tag, attrs):
-
         if tag == "div":
             if attrs and attrs[0][1] == "article section":
                 self.indiv = True
@@ -25,6 +25,9 @@ class ArticleParser(HTMLParser):
             self.inp = True
         elif tag == "h1":
             self.intitle = True
+        elif tag == "meta":
+            if attrs and attrs[0][1] == "description":
+                self.article.description = attrs[1][1]
 
     def handle_data(self, data):
         if self.inp:

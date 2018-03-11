@@ -30,6 +30,7 @@ def crawlArticles(article_links):
         parser = ArticleParser()
         parser.feed(str(response.content))
         article_content.append(parser.content)
+        print(parser.title)
 
     return [content for content in article_content if content != ""]
 

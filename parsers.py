@@ -2,12 +2,15 @@ from html.parser import HTMLParser
 
 # Parse content from an article page
 class ArticleParser(HTMLParser):
+    intitle = False
     indiv = False
     inp = False
     nesting = 0
+    title = ""
     content = ""
 
     def handle_starttag(self, tag, attrs):
+
         if tag == "div":
             if attrs and attrs[0][1] == "article section":
                 self.indiv = True
@@ -16,10 +19,14 @@ class ArticleParser(HTMLParser):
                 self.nesting += 1
         elif tag == "p" and not attrs and self.indiv:
             self.inp = True
+        elif tag == "h1":
+            self.intitle = True
 
     def handle_data(self, data):
         if self.inp:
             self.content = self.content + " " + data.encode().decode('unicode_escape')
+        elif self.intitle:
+            self.title = data
 
     def handle_endtag(self, tag):
         if tag == "div" and self.indiv:
@@ -30,6 +37,8 @@ class ArticleParser(HTMLParser):
         elif tag == "p" and self.indiv and self.inp:
             self.inp = False
             self.content += "\n"
+        elif tag == "h1":
+            self.intitle = False
 
 # Parse list of articles from a topic page
 class TopicParser(HTMLParser):
@@ -67,3 +76,7 @@ class TopicParser(HTMLParser):
                 # reset markers
                 self.is_media = False
                 self.initem = False
+
+class Article:
+    def __init__(self, title):
+        self.title = title

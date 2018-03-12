@@ -35,5 +35,5 @@ def crawlArticles(article_links):
 
 # Output article content to a csv file
 def outputToCsv(articles, file_name):
-    df = pd.DataFrame([vars(x) for x in articles], columns=['title', 'description', 'content'])
+    df = pd.DataFrame([vars(x) for x in articles], columns=['title', 'date', 'description', 'content'])
     df.to_csv(file_name)

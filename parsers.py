@@ -5,6 +5,7 @@ class Article:
         self.title = title
         self.content = ""
         self.description = ""
+        self.date = ""
 
 # Parse content from an article page
 class ArticleParser(HTMLParser):
@@ -28,6 +29,8 @@ class ArticleParser(HTMLParser):
         elif tag == "meta":
             if attrs and attrs[0][1] == "description":
                 self.article.description = attrs[1][1]
+            elif attrs and attrs[0][1] == "og:updated_time":
+                self.article.date = attrs[1][1]
 
     def handle_data(self, data):
         if self.inp:

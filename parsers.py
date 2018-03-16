@@ -52,8 +52,15 @@ class ArticleParser(HTMLParser):
 
     # Returns current article and resets object for next parse
     def retrieve_article(self):
+        # reset parser article
         article = self.article
         self.article = Article()
+
+        # remove unicode from article content
+        import string
+        printable = set(string.printable)
+        article.content = "".join(filter(lambda x: x in printable, article.content))
+
         return article
 
 # Parse list of articles from a topic page

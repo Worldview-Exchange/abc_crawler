@@ -16,7 +16,7 @@ def crawlTopic(topic, num_articles):
         page += 1
         topic += "?page=%d" % page
 
-        # exit loop when enough article links have been extracted
+        # exit loop when enough article links have been extractedcr
         if len(parser.articles) > num_articles:
             break
 
@@ -35,5 +35,5 @@ def crawlArticles(article_links):
 
 # Output article content to a csv file
 def outputToCsv(articles, file_name):
-    df = pd.DataFrame([vars(x) for x in articles], columns=['title', 'date', 'description', 'content'])
+    df = pd.DataFrame([vars(x) for x in articles], columns=['title', 'date', 'description', 'content', 'topics'])
     df.to_csv(file_name)

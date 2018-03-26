@@ -6,7 +6,7 @@ class Article:
         self.content = ""
         self.description = ""
         self.date = ""
-        self.tags = []
+        self.topics = []
 
 # Parse content from an article page
 class ArticleParser(HTMLParser):
@@ -14,6 +14,7 @@ class ArticleParser(HTMLParser):
     indiv = False
     inp = False
     intopics = False
+    attopic = False
     nesting = 0
     article = Article()
 
@@ -33,16 +34,19 @@ class ArticleParser(HTMLParser):
                 self.article.description = attrs[1][1]
             elif attrs and attrs[0][1] == "og:updated_time":
                 self.article.date = attrs[1][1]
-        elif tag == "p" and attrs[0][1] = "topics"
-            self.intopics = True
+        elif tag == "p":
+            if attrs and attrs[0][1] == "topics":
+                self.intopics = True
+        elif tag == "a" and self.intopics:
+            self.attopic = True
 
     def handle_data(self, data):
         if self.inp:
             self.article.content += data.encode().decode('unicode_escape') + " "
         elif self.intitle:
             self.article.title += data
-        elif self.intopics:
-            self.topics.append(data)
+        elif self.intopics and self.attopic:
+            self.article.topics.append(data)
 
     def handle_endtag(self, tag):
         if tag == "div" and self.indiv:
@@ -57,6 +61,9 @@ class ArticleParser(HTMLParser):
             self.intitle = False
         elif tag == "p" and self.intopics:
             self.intopics = False
+        elif tag == "a" and self.attopic:
+
+            self.attopic = False
 
     # Returns current article and resets object for next parse
     def retrieve_article(self):

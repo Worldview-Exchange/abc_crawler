@@ -3,6 +3,7 @@ from html.parser import HTMLParser
 class Article:
     def __init__(self, title=""):
         self.title = title
+        self.url = ""
         self.content = ""
         self.description = ""
         self.date = ""

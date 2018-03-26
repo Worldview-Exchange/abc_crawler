@@ -62,7 +62,6 @@ class ArticleParser(HTMLParser):
         elif tag == "p" and self.intopics:
             self.intopics = False
         elif tag == "a" and self.attopic:
-
             self.attopic = False
 
     # Returns current article and resets object for next parse
@@ -108,7 +107,7 @@ class TopicParser(HTMLParser):
             elif tag == "h3":
                 # if not a media or broken article then add to list
                 if not self.is_media and self.current_article != "":
-                    print("%d: %s" % (len(self.articles), self.current_article))
+                    #print("%d: %s" % (len(self.articles), self.current_article))
                     self.articles.append(self.current_article)
 
                 # reset markers

@@ -11,13 +11,18 @@ class Article:
 
 # Parse content from an article page
 class ArticleParser(HTMLParser):
-    intitle = False
-    indiv = False
-    inp = False
-    intopics = False
-    attopic = False
-    nesting = 0
-    article = Article()
+
+    def __init__(self):
+        super().__init__()
+        self.reset()
+
+        self.intitle = False
+        self.indiv = False
+        self.inp = False
+        self.intopics = False
+        self.attopic = False
+        self.nesting = 0
+        self.article = Article()
 
     def handle_starttag(self, tag, attrs):
         if tag == "div":
@@ -80,12 +85,17 @@ class ArticleParser(HTMLParser):
 
 # Parse list of articles from a topic page
 class TopicParser(HTMLParser):
-    inlist = False
-    initem = False
-    is_media = False
 
-    current_article = ""
-    articles = []
+    def __init__(self):
+        super().__init__()
+        self.reset()
+
+        self.inlist = False
+        self.initem = False
+        self.is_media = False
+
+        self.current_article = ""
+        self.articles = []
 
     def handle_starttag(self, tag, attrs):
         if tag == "ul":

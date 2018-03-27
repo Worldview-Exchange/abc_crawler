@@ -47,7 +47,8 @@ def get_similar_articles(article, num_articles=10, similarity=0.2):
 
     articles = []
     for topic in article.topics:
-        [articles.append(x) for x in crawlTopic(topic, num_articles)]
+        [articles.append(x) for x in crawlTopic(topic, num_articles) 
+            if x not in articles and x != article.url]
 
     crawled = crawlArticles(articles)
     similar = [x for x in crawled 

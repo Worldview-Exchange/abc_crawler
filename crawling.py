@@ -40,19 +40,26 @@ def outputToCsv(articles, file_name):
     df = pd.DataFrame([vars(x) for x in articles], columns=['url', 'title', 'date', 'description', 'content', 'topics'])
     df.to_csv(file_name)
 
+# ---------- #
+
+def crawl_page(topic):
+    parser = TopicParser()
+    response = requests.get("http://www.abc.net.au/news/topic/%s" % topic)
+    parser.feed(str(response.content))
+
+    return parser.articles[:num_articles]
+
 # Get set of articles that are similar to a given article
 def get_similar_articles(article, num_articles=10, similarity=0.2):
-    # define necessary number of shared topics
-    sim_threshold = int(len(article.topics)*similarity)
-
+    # TODO do this page by page until getting desired number of similar arts
     articles = []
     for topic in article.topics:
-        [articles.append(x) for x in crawlTopic(topic, num_articles) 
+        [articles.append(x) for x in crawl_page(topic) 
             if x not in articles and x != article.url]
 
     crawled = crawlArticles(articles)
     similar = [x for x in crawled 
-                    if len(set(x.topics).intersection(article.topics)) >= sim_threshold
+                    if len(set(x.topics).intersection(article.topics)) >= int(len(article.topics)*similarity)
                     and len(set(x.topics).intersection(article.topics)) >= int(len(x.topics)*similarity)]
     similar.sort(key=lambda x: len([y for y in x.topics if y in article.topics]))
     return similar[-num_articles:]

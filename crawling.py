@@ -47,19 +47,31 @@ def crawl_page(topic):
     response = requests.get("http://www.abc.net.au/news/topic/%s" % topic)
     parser.feed(str(response.content))
 
-    return parser.articles[:num_articles]
+    return parser.articles
 
 # Get set of articles that are similar to a given article
 def get_similar_articles(article, num_articles=10, similarity=0.2):
-    # TODO do this page by page until getting desired number of similar arts
-    articles = []
-    for topic in article.topics:
-        [articles.append(x) for x in crawl_page(topic) 
-            if x not in articles and x != article.url]
+    similar = []
+    page = 1
 
-    crawled = crawlArticles(articles)
-    similar = [x for x in crawled 
-                    if len(set(x.topics).intersection(article.topics)) >= int(len(article.topics)*similarity)
-                    and len(set(x.topics).intersection(article.topics)) >= int(len(x.topics)*similarity)]
+    # crawl articles of similar topics until desired number of articles are acquired
+    while len(similar) < num_articles:
+        articles = []
+        for topic in article.topics:
+            topic += "?page=%d" % page
+            [articles.append(x) for x in crawl_page(topic) 
+                if x not in articles and x != article.url]
+
+        # crawl identified articles and append each that satisfies similarity criteria
+        crawled = crawlArticles(articles)
+        [similar.append(x) for x in crawled 
+                if len(set(x.topics).intersection(article.topics)) >= int(len(article.topics)*similarity)
+                and len(set(x.topics).intersection(article.topics)) >= int(len(x.topics)*similarity)]
+        
+        # incremement page flag
+        page+=1
+
+    # TODO use different metric (proprotion of overlap) for sorting
     similar.sort(key=lambda x: len([y for y in x.topics if y in article.topics]))
+    
     return similar[-num_articles:]

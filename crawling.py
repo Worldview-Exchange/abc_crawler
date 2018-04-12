@@ -72,6 +72,6 @@ def get_similar_articles(article, num_articles=10, similarity=0.2):
         page+=1
 
     # TODO use different metric (proprotion of overlap) for sorting
-    similar.sort(key=lambda x: len([y for y in x.topics if y in article.topics]))
+    similar.sort(key=lambda x: len([y for y in x.topics if y in article.topics]), reverse=True)
     
-    return similar[-num_articles:]
+    return similar[:num_articles]

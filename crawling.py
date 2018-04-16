@@ -75,10 +75,9 @@ def get_similar_articles(article, num_articles=10, similarity=0.2):
         # incremement page flag
         page+=1
 
-    # TODO use different metric (proprotion of overlap) for sorting
-    scored = [(x, len([y for y in x.topics if y in article.topics]) * 
+    # score related articles
+    scored = [(x, len(set(x.topics).intersection(article.topics))/float(len(article.topics)) * 
                     1/float(abs((parse(x.date) - parse(article.date)).days)+1)) for x in similar]
-    print(scored)
     scored.sort(key=lambda x: x[1], reverse=True)
     
     return scored[:num_articles]

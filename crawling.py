@@ -51,6 +51,9 @@ def crawl_page(topic):
 
 # Get set of articles that are similar to a given article
 def get_similar_articles(article, num_articles=10, similarity=0.2):
+    from dateutil.parser import parse
+    from datetime import datetime
+
     similar = []
     page = 1
 
@@ -64,7 +67,8 @@ def get_similar_articles(article, num_articles=10, similarity=0.2):
 
         # crawl identified articles and append each that satisfies similarity criteria
         crawled = crawlArticles(articles)
-        [similar.append(x) for x in crawled 
+        time_relevant = [x for x in crawled if abs((parse(x.date) - parse(article.date)).days) <= 7]
+        [similar.append(x) for x in time_relevant 
                 if len(set(x.topics).intersection(article.topics)) >= int(len(article.topics)*similarity)
                 and len(set(x.topics).intersection(article.topics)) >= int(len(x.topics)*similarity)]
         

@@ -1,7 +1,7 @@
 from html.parser import HTMLParser
 
 class Article:
-    def __init__(self, title=""):
+    def __init__(self, title="", url="", content="", description="", date="", topics=[]):
         self.title = title
         self.url = ""
         self.content = ""

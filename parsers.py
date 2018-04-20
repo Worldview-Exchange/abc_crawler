@@ -3,11 +3,11 @@ from html.parser import HTMLParser
 class Article:
     def __init__(self, title="", url="", content="", description="", date="", topics=[]):
         self.title = title
-        self.url = ""
-        self.content = ""
-        self.description = ""
-        self.date = ""
-        self.topics = []
+        self.url = url
+        self.content = content
+        self.description = description
+        self.date = date
+        self.topics = topics
 
 # Parse content from an article page
 class ArticleParser(HTMLParser):
